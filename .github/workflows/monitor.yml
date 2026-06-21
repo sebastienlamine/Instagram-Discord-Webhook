@@ -1,9 +1,7 @@
 name: Instagram Monitor
 
 on:
-  schedule:
-    - cron: "*/30 * * * *"   # every 30 minutes
-  workflow_dispatch:        # allow manual trigger
+  workflow_dispatch:        # triggered by cron-job.org
 
 concurrency:
   group: instagram-monitor
