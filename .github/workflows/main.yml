@@ -23,7 +23,7 @@ jobs:
 
       - name: Run script
         env:
-          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
-          IG_USERNAME: ${{ secrets.IG_USERNAME }}
+          WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK }}
+          IG_USERNAME: ${{ secrets.INSTAGRAM_USERNAME }}
           TIME_INTERVAL: '600'
         run: python bot.py
