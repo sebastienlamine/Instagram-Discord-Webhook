@@ -2,11 +2,11 @@ name: Instagram Monitor
 
 on:
   schedule:
-    - cron: "*/15 * * * *"   # every 15 minutes (GitHub minimum is 5min but 15min is safer)
-  workflow_dispatch:           # allow manual trigger from the Actions tab
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
 
 permissions:
-  contents: write              # needed to commit state.txt back to the repo
+  contents: write
 
 jobs:
   check:
@@ -16,31 +16,20 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # Restore the Instagram session between runs to avoid repeated logins
-      - name: Restore Instagram session cache
-        uses: actions/cache@v4
-        with:
-          path: ig_session.json
-          key: ig-session-${{ runner.os }}
-          restore-keys: ig-session-
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install instagrapi requests
+        run: pip install requests beautifulsoup4
 
       - name: Run monitor
         env:
-          IG_USERNAME: ${{ secrets.IG_USERNAME }}
-          IG_PASSWORD: ${{ secrets.IG_PASSWORD }}
           IG_TARGET:   ${{ secrets.IG_TARGET }}
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
         run: python instagram-discord.py
 
-      # Commit state.txt so the next run knows the last post seen
       - name: Save state
         run: |
           git config user.name  "github-actions[bot]"

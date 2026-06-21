@@ -1,2 +1,2 @@
-instagrapi
 requests
+beautifulsoup4
