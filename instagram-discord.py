@@ -78,7 +78,11 @@ def send_to_discord(post: dict) -> None:
 
     resp = requests.post(
         WEBHOOK_URL,
-        json={"content": "@everyone", "embeds": [embed]},
+        json={
+            "content": "@everyone",
+            "allowed_mentions": {"parse": ["everyone"]},
+            "embeds": [embed],
+        },
         timeout=10,
     )
     resp.raise_for_status()

@@ -21,6 +21,7 @@ Envoie automatiquement une notification dans un salon Discord à chaque nouveau 
 - Un compte [Apify](https://apify.com) (gratuit — $5 de crédits/mois offerts)
 - Un compte [cron-job.org](https://cron-job.org) (gratuit)
 - Un serveur Discord avec droits d'administration
+- Un webhook Discord créé dans le salon où tu veux recevoir les notifications (expliqué à l'étape 2)
 
 ---
 
@@ -172,6 +173,69 @@ L'intervalle se configure dans cron-job.org (pas dans le code).
     └── workflows/
         └── monitor.yml         # Configuration GitHub Actions
 ```
+
+---
+
+## Personnalisation du message Discord
+
+Toutes les modifications se font dans le fichier `instagram-discord.py`, dans la fonction `send_to_discord`.
+
+---
+
+### Changer le titre du message
+
+Trouve cette ligne :
+```python
+"title": f"Nouveau post de @{IG_TARGET} ! Va vite le voir !",
+```
+Remplace le texte entre guillemets par ce que tu veux. Le `{IG_TARGET}` sera remplacé automatiquement par le username Instagram.
+
+---
+
+### Changer la couleur de la barre latérale
+
+Trouve cette ligne :
+```python
+"color": 15467852,
+```
+Remplace `15467852` par le code décimal de ta couleur. Pour convertir une couleur :
+1. Choisis ta couleur sur [htmlcolorcodes.com](https://htmlcolorcodes.com)
+2. Copie le code hexadécimal (ex: `#FF5733`)
+3. Convertis-le sur [binaryhexconverter.com](https://www.binaryhexconverter.com/hex-to-decimal-converter) (ex: `FF5733` → `16734003`)
+4. Remplace le nombre dans le code
+
+---
+
+### Activer ou désactiver le @everyone
+
+**Pour désactiver le @everyone**, remplace :
+```python
+"content": "@everyone",
+"allowed_mentions": {"parse": ["everyone"]},
+```
+par :
+```python
+"content": "",
+```
+
+**Pour mentionner un rôle spécifique** à la place de @everyone :
+```python
+"content": "<@&ID_DU_ROLE>",
+```
+> Pour obtenir l'ID d'un rôle Discord : active le mode développeur dans Discord (Paramètres → Avancé → Mode développeur), puis fais clic droit sur le rôle → **Copier l'identifiant**.
+
+---
+
+### Après chaque modification
+
+```bash
+git add .
+git commit -m "feat: personnalisation du message Discord"
+git pull --rebase
+git push
+```
+
+Puis vide `state.txt` sur GitHub et teste via cron-job.org pour voir le résultat.
 
 ---
 
